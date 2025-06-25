@@ -9,7 +9,7 @@ router = APIRouter()
 
 
 @router.post('/', response_model=schemas.STK_PushResponse)
-async def stk_push( transaction: schemas.STK_PushCreate,user=Depends(get_current_admin), db: Session = Depends(get_db)):
+async def stk_push( transaction: schemas.STK_PushCreate, db: Session = Depends(get_db)):
     try:
         token = get_access_token()
         # Make sure to await the asynchronous function stk_push_sender

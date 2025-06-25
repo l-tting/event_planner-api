@@ -23,11 +23,10 @@ def superadmin_required(current_admin: Admin = Depends(auth.get_current_admin)):
 
 
 @router.post("/create", status_code=status.HTTP_201_CREATED)
-
 async def create_admin(
     admin: AdminCreate,
     db: Session = Depends(get_db),
-    current_admin:Admin=Depends(superadmin_required)
+    # current_admin:Admin=Depends(superadmin_required)
 ):
     existing = db.query(Admin).filter(Admin.admin_email == admin.admin_email).first()
     if existing:
