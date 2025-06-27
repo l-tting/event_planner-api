@@ -21,7 +21,7 @@ jobs:
 
     - name: 📂 Sync harmonyapi to server
       run: |
-        rsync -avz -e "ssh -i ~/.ssh/id_rsa -o StrictHostKeyChecking=no -p ${{ secrets.SSH_PORT }}" ./harmony_api/ ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}:/root/harmonyapi/
+        rsync -avz -e "ssh -i ~/.ssh/id_rsa -o StrictHostKeyChecking=no -p ${{ secrets.SSH_PORT }}" harmony_api/ ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}:/root/harmonyapi/
 
     - name: 🔁 Restart Docker Compose using harmony.yml
       run: |
