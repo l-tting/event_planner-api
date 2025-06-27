@@ -181,3 +181,6 @@ async def process_stk_push_callback(callback_data: schemas.MpesaCallback, db: Se
     except Exception as e:
         db.rollback()
         raise HTTPException(status_code=500, detail=str(e))
+    
+def tester():
+    pass
