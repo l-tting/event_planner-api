@@ -1,4 +1,4 @@
-name: 🔄 Simple FastAPI Deploy
+name: 🚀 Deploy FastAPI to Server
 
 on:
   push:
@@ -12,29 +12,26 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - name: ✅ Checkout code
+    - name: 🧾 Checkout code
       uses: actions/checkout@v3
 
-    - name: 🔐 Setup SSH key
+    - name: 🔐 Set up SSH key
       run: |
         mkdir -p ~/.ssh
         echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_rsa
         chmod 600 ~/.ssh/id_rsa
 
-    - name: 📦 Zip harmony_api folder
+    - name: 📦 Zip FastAPI backend
       run: zip -r harmony_api.zip harmony_api
 
-    - name: 🚀 Copy zip to server and unzip + restart
+    - name: 📤 Upload to server & deploy
       run: |
-        ssh -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa -p ${{ secrets.SSH_PORT }} ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} << 'EOF'
-          rm -rf /root/harmonyapi
-        EOF
+        scp -i ~/.ssh/id_rsa -o StrictHostKeyChecking=no -P ${{ secrets.SSH_PORT }} harmony_api.zip ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}:/root/
 
-        scp -P ${{ secrets.SSH_PORT }} -i ~/.ssh/id_rsa harmony_api.zip ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}:/root/
-
-        ssh -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa -p ${{ secrets.SSH_PORT }} ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} << 'EOF'
+        ssh -i ~/.ssh/id_rsa -o StrictHostKeyChecking=no -p ${{ secrets.SSH_PORT }} ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} << 'EOF'
           cd /root
-          unzip -o harmony_api.zip -d .
+          rm -rf harmonyapi
+          unzip harmony_api.zip -d .
           rm harmony_api.zip
           docker compose -f harmony.yml up -d --build
         EOF
