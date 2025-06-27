@@ -52,7 +52,7 @@ def login_user(user: schemas.AdminLogin, db: Session = Depends(get_db)):
     valid_admin = db.query(Admin).filter(Admin.admin_email == user.admin_email).first()
     
     if valid_admin is None or not check_password_hash(valid_admin.password, user.admin_password):
-        raise HTTPException(status_code=404, detail="Invalid credentials")
+        raise HTTPException(status_code=401, detail="Invalid credentials")
     
     access_token = auth.create_access_token(
         data={"user": user.admin_email}, 
